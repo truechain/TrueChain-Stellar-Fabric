@@ -1,0 +1,40 @@
+body {
+  margin: 0;
+  overflow: hidden;
+}
+p, ul {
+  margin: 0;
+  padding: 0;
+}
+li {
+  list-style: none;
+}
+input {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: inherit;
+  box-sizing: border-box;
+  height: 30px;
+  border-radius: 3px;
+  border: solid 1px #bbb;
+  padding: 0 9px;
+  font-size: 14px;
+  outline: none;
+}
+.tc-card {
+  border-radius: 3px;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 2px 4px #0001;
+}
+.no-data {
+  font-size: 14px;
+  color: #bbb;
+  text-align: center;
+  background-color: #f9f9f9;
+  line-height: 40px;
+}
+.clear {
+  clear: both;
+}
