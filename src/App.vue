@@ -6,8 +6,8 @@
         <div class="tc-nav-title" v-for="item in routes" :key="routes.indexOf(item)" :class="{'tc-nav-title-focus': $route.name === item.name}" @click="$router.push(item.path)">{{item.name}}</div>
       </div>
       <div class="tc-login" v-if="$route.name === null">
-        <div>Name<input type="text"></div>
-        <div>Password<input type="password"></div>
+        <div>Name<input type="text" v-model="username"></div>
+        <div>Password<input type="password" v-model="password"></div>
         <span @click.stop="signIn">Sign in</span>
       </div>
     </nav>
@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+import apiConfig from './api-config'
 import routes from './router/routes.js'
 
 export default {
@@ -36,6 +38,8 @@ export default {
       userInfo: {
         name: 'testUser'
       },
+      username: '',
+      password: '',
       userCtrlisOpen: false
     }
   },
@@ -44,9 +48,25 @@ export default {
   },
   methods: {
     signIn () {
+      let data = {
+        username: this.username,
+        orgName: this.password
+      }
+      axios.post(apiConfig.url + '/user', data, {
+        headers: {'content-type': 'application/x-www-form-urlencoded'}
+      }).then(function (response) {
+        // do something to get token
+        console.log(response)
+      }).catch(function (error) {
+        console.log(error)
+      })
       this.$router.push('/chain')
     },
     signOut () {
+      window.cookieStorage.setItem('userToken', 'anyValue', {
+        expires: new Date()
+      })
+      // do something to remove token
       this.$router.push('/')
     },
     openUserCtrl () {
