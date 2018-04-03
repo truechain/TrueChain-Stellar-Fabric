@@ -7,12 +7,9 @@ import router from './router'
 import './style.css'
 
 import {CookieStorage} from 'cookie-storage'
-
 window.cookieStorage = new CookieStorage()
 
 Vue.config.productionTip = false
-
-window.sessionStorage.setItem('userToken', window.cookieStorage.getItem('userToken'))
 
 /* eslint-disable no-new */
 new Vue({

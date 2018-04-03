@@ -26,9 +26,10 @@
 </template>
 
 <script>
-import axios from 'axios'
-import apiConfig from './api-config'
 import routes from './router/routes.js'
+import api from '@/api-config'
+
+window.api = api
 
 export default {
   name: 'App',
@@ -48,14 +49,13 @@ export default {
   },
   methods: {
     signIn () {
-      let data = {
-        username: this.username,
-        orgName: this.password
-      }
-      axios.post(apiConfig.url + '/user', data, {
-        headers: {'content-type': 'application/x-www-form-urlencoded'}
-      }).then(function (response) {
+      api.enroll('v1', 'v2').then(function (response) {
         // do something to get token
+        let d = new Date()
+        d.setMinutes(d.getMinutes + 30)
+        window.cookieStorage.setItem('userToken', 'anyValue', {
+          expires: d
+        })
         console.log(response)
       }).catch(function (error) {
         console.log(error)
@@ -66,7 +66,6 @@ export default {
       window.cookieStorage.setItem('userToken', 'anyValue', {
         expires: new Date()
       })
-      // do something to remove token
       this.$router.push('/')
     },
     openUserCtrl () {
