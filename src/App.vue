@@ -7,7 +7,7 @@
       </div>
       <div class="tc-login" v-if="$route.name === null">
         <div>Name<input type="text" v-model="username"></div>
-        <div>Password<input type="password" v-model="password"></div>
+        <div>orgName<input type="text" v-model="orgname"></div>
         <span @click.stop="signIn">Sign in</span>
       </div>
     </nav>
@@ -40,7 +40,7 @@ export default {
         name: 'testUser'
       },
       username: '',
-      password: '',
+      orgname: '',
       userCtrlisOpen: false
     }
   },
@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     signIn () {
-      api.enroll('v1', 'v2').then(function (response) {
+      api.enroll(this.username, this.orgname).then(function (response) {
         // do something to get token
         let d = new Date()
         d.setMinutes(d.getMinutes + 30)
