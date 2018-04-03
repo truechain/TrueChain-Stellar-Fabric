@@ -4,10 +4,7 @@ const url = 'http://54.244.27.19:4000'
 
 export default {
   enroll (username, orgName) {
-    let data = {
-      username,
-      orgName
-    }
+    let data = `username=${username}&orgName=${orgName}`
     return axios.post(url + '/users', data, {
       headers: {'content-type': 'application/x-www-form-urlencoded'}
     })

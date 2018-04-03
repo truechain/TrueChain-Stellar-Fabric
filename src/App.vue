@@ -49,18 +49,22 @@ export default {
   },
   methods: {
     signIn () {
-      api.enroll(this.username, this.orgname).then(function (response) {
+      api.enroll(this.username, this.orgname).then((response) => {
         // do something to get token
-        let d = new Date()
-        d.setMinutes(d.getMinutes + 30)
-        window.cookieStorage.setItem('userToken', 'anyValue', {
-          expires: d
-        })
-        console.log(response)
-      }).catch(function (error) {
-        console.log(error)
-      })
-      this.$router.push('/chain')
+        if (response.status === 200) {
+          let data = response.data
+          if (data.success) {
+            let d = new Date()
+            d.setMinutes(d.getMinutes + 30)
+            window.cookieStorage.setItem('userToken', data.token, {
+              expires: d
+            })
+            this.$router.push('/chain')
+          } else {
+            console.log('wran')
+          }
+        }
+      }).catch()
     },
     signOut () {
       window.cookieStorage.setItem('userToken', 'anyValue', {
