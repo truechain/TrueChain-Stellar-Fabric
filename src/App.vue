@@ -22,6 +22,7 @@
       </div>
       <router-view/>
     </div>
+    <div id="tc-notice"></div>
   </div>
 </template>
 
@@ -41,11 +42,13 @@ export default {
       },
       username: '',
       orgname: '',
-      userCtrlisOpen: false
+      userCtrlisOpen: false,
+      noticeBox: null,
+      noticeBoxTimer: 0
     }
   },
   mounted () {
-    window.el = this
+    this.noticeBox = this.$el.querySelector('#tc-notice')
   },
   methods: {
     signIn () {
@@ -60,12 +63,15 @@ export default {
               expires: d
             })
             this.userInfo.name = this.username
+            this.notice('#4596f5', `Log in as ${this.username}.`, 4000)
             this.$router.push('/chain')
           } else {
-            console.log('wran')
+            this.notice('#f78432', 'Check out your orgName.', 4000)
           }
         }
-      }).catch()
+      }).catch(() => {
+        this.notice('#d21107', 'Network error!', 3000)
+      })
     },
     signOut () {
       window.cookieStorage.setItem('userToken', 'anyValue', {
@@ -78,6 +84,27 @@ export default {
     },
     closeUserCtrl () {
       this.userCtrlisOpen = false
+    },
+    notice (color, text, time) {
+      let el = this.noticeBox
+      if (!el) {
+        return
+      }
+      let delay = 0
+      if (this.noticeBoxTimer) {
+        clearTimeout(this.noticeBoxTimer)
+        delay = 300
+      }
+      el.style.transform = 'translateY(110%)'
+      el.style.backgroundColor = color
+      el.innerHTML = text
+      setTimeout(() => {
+        el.style.transform = 'translateY(0%)'
+      }, delay)
+      this.noticeBoxTimer = setTimeout(() => {
+        el.style.transform = 'translateY(110%)'
+        this.noticeBoxTimer = 0
+      }, delay + time)
     }
   }
 }
@@ -197,5 +224,20 @@ nav {
 }
 .tc-user-ctrl-open .tc-user-ctrl {
   transform: translateX(0)
+}
+#tc-notice {
+  position: fixed;
+  width: 100vw;
+  min-height: 60px;
+  bottom: 0;
+  left: 0;
+  z-index: 20;
+  box-shadow: 0px -4px 4px #0001;
+  transition: transform .6s;
+  transform: translateY(110%);
+  padding: 20px;
+  box-sizing: border-box;
+  line-height: 20px;
+  color: #fff;
 }
 </style>
