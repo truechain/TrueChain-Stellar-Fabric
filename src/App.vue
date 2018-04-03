@@ -37,7 +37,7 @@ export default {
     return {
       routes,
       userInfo: {
-        name: 'testUser'
+        name: ''
       },
       username: '',
       orgname: '',
@@ -59,6 +59,7 @@ export default {
             window.cookieStorage.setItem('userToken', data.token, {
               expires: d
             })
+            this.userInfo.name = this.username
             this.$router.push('/chain')
           } else {
             console.log('wran')
@@ -143,7 +144,10 @@ nav {
   clear: both;
 }
 .tc-login span {
-  clear: both;
+  width: 80px;
+  float: left;
+  line-height: 30px;
+  /* clear: both; */
   cursor: pointer;
 }
 #tc-content {

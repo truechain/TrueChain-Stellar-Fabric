@@ -33,9 +33,9 @@
               <td>{{item.time}}</td>
             </tr>
           </table>
-          <div v-if="blockPagedInfo.isPaged" class="tc-page-ctrl">
+          <!-- <div v-if="blockPagedInfo.isPaged" class="tc-page-ctrl">
             <input type="text" v-model="blockPagedInfo.nowInPage"> / {{blockPagedInfo.pageNum}}
-          </div>
+          </div> -->
           <div v-if="blockInfo.length === 0" class="no-data">No data</div>
         </div>
       </li>
@@ -67,21 +67,21 @@ export default {
     return {
       baseInfo: [
         {name: 'Peer', value: '3', img: require('@/assets/icon/peer.png')},
-        {name: 'Block', value: '281', img: require('@/assets/icon/block.png')},
-        {name: 'Contract', value: '2', img: require('@/assets/icon/contract.png')},
-        {name: 'Transaction', value: '351', img: require('@/assets/icon/transaction.png')}
+        {name: 'Block', value: '0', img: require('@/assets/icon/block.png')},
+        {name: 'Chaincode', value: '0', img: require('@/assets/icon/contract.png')},
+        {name: 'Transaction', value: '0', img: require('@/assets/icon/transaction.png')}
       ],
       blockInfo: [
-        {id: 0, hash: 'b333288559db46ba9933fd30345fa4f415d533f5e852d5945d919e0e9d7bb87e', trans: 1, time: '2018-03-14 17:06:48'},
-        {id: 0, hash: 'b333288559db46ba9933fd30345fa4f415d533f5e852d5945d919e0e9d7bb87e', trans: 1, time: '2018-03-14 17:06:48'},
-        {id: 0, hash: 'b333288559db46ba9933fd30345fa4f415d533f5e852d5945d919e0e9d7bb87e', trans: 1, time: '2018-03-14 17:06:48'},
-        {id: 0, hash: 'b333288559db46ba9933fd30345fa4f415d533f5e852d5945d919e0e9d7bb87e', trans: 1, time: '2018-03-14 17:06:48'},
-        {id: 0, hash: 'b333288559db46ba9933fd30345fa4f415d533f5e852d5945d919e0e9d7bb87e', trans: 1, time: '2018-03-14 17:06:48'},
-        {id: 0, hash: 'b333288559db46ba9933fd30345fa4f415d533f5e852d5945d919e0e9d7bb87e', trans: 1, time: '2018-03-14 17:06:48'},
-        {id: 0, hash: 'b333288559db46ba9933fd30345fa4f415d533f5e852d5945d919e0e9d7bb87e', trans: 1, time: '2018-03-14 17:06:48'},
-        {id: 0, hash: 'b333288559db46ba9933fd30345fa4f415d533f5e852d5945d919e0e9d7bb87e', trans: 1, time: '2018-03-14 17:06:48'},
-        {id: 0, hash: 'b333288559db46ba9933fd30345fa4f415d533f5e852d5945d919e0e9d7bb87e', trans: 1, time: '2018-03-14 17:06:48'},
-        {id: 0, hash: 'b333288559db46ba9933fd30345fa4f415d533f5e852d5945d919e0e9d7bb87e', trans: 1, time: '2018-03-14 17:06:48'}
+        // {id: 0, hash: 'b333288559db46ba9933fd30345fa4f415d533f5e852d5945d919e0e9d7bb87e', trans: 1, time: '2018-03-14 17:06:48'},
+        // {id: 0, hash: 'b333288559db46ba9933fd30345fa4f415d533f5e852d5945d919e0e9d7bb87e', trans: 1, time: '2018-03-14 17:06:48'},
+        // {id: 0, hash: 'b333288559db46ba9933fd30345fa4f415d533f5e852d5945d919e0e9d7bb87e', trans: 1, time: '2018-03-14 17:06:48'},
+        // {id: 0, hash: 'b333288559db46ba9933fd30345fa4f415d533f5e852d5945d919e0e9d7bb87e', trans: 1, time: '2018-03-14 17:06:48'},
+        // {id: 0, hash: 'b333288559db46ba9933fd30345fa4f415d533f5e852d5945d919e0e9d7bb87e', trans: 1, time: '2018-03-14 17:06:48'},
+        // {id: 0, hash: 'b333288559db46ba9933fd30345fa4f415d533f5e852d5945d919e0e9d7bb87e', trans: 1, time: '2018-03-14 17:06:48'},
+        // {id: 0, hash: 'b333288559db46ba9933fd30345fa4f415d533f5e852d5945d919e0e9d7bb87e', trans: 1, time: '2018-03-14 17:06:48'},
+        // {id: 0, hash: 'b333288559db46ba9933fd30345fa4f415d533f5e852d5945d919e0e9d7bb87e', trans: 1, time: '2018-03-14 17:06:48'},
+        // {id: 0, hash: 'b333288559db46ba9933fd30345fa4f415d533f5e852d5945d919e0e9d7bb87e', trans: 1, time: '2018-03-14 17:06:48'},
+        // {id: 0, hash: 'b333288559db46ba9933fd30345fa4f415d533f5e852d5945d919e0e9d7bb87e', trans: 1, time: '2018-03-14 17:06:48'}
       ],
       blockPagedInfo: {
         isPaged: true,
