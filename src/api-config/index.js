@@ -8,7 +8,7 @@ export default {
       username,
       orgName
     }
-    return axios.post(url + '/user', data, {
+    return axios.post(url + '/users', data, {
       headers: {'content-type': 'application/x-www-form-urlencoded'}
     })
   },
