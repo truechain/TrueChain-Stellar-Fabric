@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const url = 'http://54.244.27.19/:4000'
+const url = 'http://54.244.27.19:4000'
 
 export default {
   enroll (username, orgName) {
