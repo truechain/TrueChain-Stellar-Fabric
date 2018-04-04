@@ -4,17 +4,41 @@
       <div class="tc-box-add">
         <div class="tc-button-add" @click.stop="addChaincode">+ Add Chaincode</div>
         <div class="tc-input-add">
-          <p>Select your Chaincode</p>
+          <p class="tc-input-title">Select your Chaincode</p>
           <input id="tc-file-button" type="file" accept=".go">
-          <div class="tc-input-file" :class="{'tc-input-file-selected': this.chaincodeFileName}">
+          <div class="tc-input-file" :class="{'tc-input-file-selected': chaincodeFileName}">
             <div>{{chaincodeFileName}}</div>
-            <div v-if="this.uploadStatus !== 'end'" class="tc-status-bar"></div>
+            <div v-if="uploadStatus !== 'end' && uploadStatus !== 'success'" class="tc-status-bar" :class="{
+              'tc-status-bar-uploading': uploadStatus === 'uploading',
+              'tc-status-bar-failed': uploadStatus === 'failed'
+            }"></div>
           </div>
           <span style="float: left;" @click.stop="stopInput">back</span>
           <span style="float: right;" @click.stop="uploadChaincode">upload</span>
         </div>
       </div>
     </div>
+    <transition-group name="fadeIn"
+      :css="false"
+      @enter="enter"
+      @leave="leave">
+      <div data-index="0" key="name" v-show="uploadStatus === 'success'" class="tc-card tc-chaincode-setinfo" :style="{'border-left-color': ccInfo.nameIsOk ? '#091' : '#d21107'}">
+        <p class="tc-input-title">Name <span>of the Chaincode</span></p>
+        <input id="tc-chaincode-setinfo-name" type="text" v-model="ccInfo.name">
+      </div>
+      <div data-index="1" key="version" v-show="uploadStatus === 'success'"  class="tc-card tc-chaincode-setinfo" :style="{'border-left-color': ccInfo.versionIsOk ? '#091' : '#d21107'}">
+        <p class="tc-input-title">Version</p>
+        <input id="tc-chaincode-setinfo-version" type="text" v-model="ccInfo.version">
+      </div>
+      <div data-index="2" key="description" v-show="uploadStatus === 'success'"  class="tc-card tc-chaincode-setinfo" :style="{'border-left-color': ccInfo.descIsOk ? '#091' : '#ddd'}">
+        <p class="tc-input-title">Description</p>
+        <textarea id="tc-chaincode-setinfo-desc" v-model="ccInfo.description"/>
+      </div>
+      <div data-index="3" key="submit" v-show="uploadStatus === 'success'"  class="tc-card tc-chaincode-submit">
+        <div class="tc-chaincode-submit-button" :class="{'active': ccInfo.nameIsOk && ccInfo.versionIsOk}">Install</div>
+      </div>
+    </transition-group>
+    <div class="clear"></div>
     <ul class="tc-chaincode-lists">
       <li>
         <div class="tc-card tc-chaincode">
@@ -44,13 +68,49 @@ export default {
       isInputing: false,
       fileInput: null,
       chaincodeFileName: '',
-      uploadStatus: 'end'
+      uploadStatus: 'end',
+      ccInfo: {
+        name: '',
+        nameIsOk: false,
+        version: '',
+        versionIsOk: false,
+        description: '',
+        descIsOk: false
+      }
     }
   },
   mounted () {
     this.fileInput = this.$el.querySelector('#tc-file-button')
     this.fileInput.addEventListener('change', (e) => {
       this.chaincodeFileName = this.fileInput.files[0].name
+    })
+
+    let ccNameInput = this.$el.querySelector('#tc-chaincode-setinfo-name')
+    ccNameInput.addEventListener('change', (e) => {
+      // check the value of ccNameInput
+      if (ccNameInput.value) {
+        this.ccInfo.nameIsOk = true
+      } else {
+        this.ccInfo.nameIsOk = false
+      }
+    })
+    let ccVersionInput = this.$el.querySelector('#tc-chaincode-setinfo-version')
+    ccVersionInput.addEventListener('change', (e) => {
+      // check the value of ccVersionInput
+      if (ccVersionInput.value) {
+        this.ccInfo.versionIsOk = true
+      } else {
+        this.ccInfo.versionIsOk = false
+      }
+    })
+    let ccDescription = this.$el.querySelector('#tc-chaincode-setinfo-desc')
+    ccDescription.addEventListener('change', (e) => {
+      // check the value of ccDescription
+      if (ccDescription.value) {
+        this.ccInfo.descIsOk = true
+      } else {
+        this.ccInfo.descIsOk = false
+      }
     })
   },
   methods: {
@@ -70,10 +130,32 @@ export default {
       }
       this.uploadStatus = 'uploading'
       api.uploadChaincode(this.chaincodeFileName, this.fileInput.files[0]).then((res) => {
+        let data = res.data
+        if (data.ok) {
+          this.uploadStatus = 'success'
+          window.notice('#4596f5', 'Upload success.', 3000)
+        } else {
+          this.uploadStatus = 'failed'
+          window.notice('#f78432', 'Upload failed, please check your chaincode.', 4000)
+        }
         console.log(res)
       }).catch(() => {
         window.notice('#d21107', 'Network Error!', 3000)
       })
+    },
+    enter (el, done) {
+      let delay = el.dataset.index * 50
+      setTimeout(() => {
+        el.style.opacity = 1
+      }, delay)
+      setTimeout(done, delay + 600)
+    },
+    leave (el, done) {
+      let delay = 150 - el.dataset.index * 50
+      setTimeout(() => {
+        el.style.opacity = 0
+      }, delay)
+      setTimeout(done, delay + 600)
     }
   }
 }
@@ -84,7 +166,8 @@ export default {
   padding: 30px;
 }
 .tc-chaincode-add {
-  margin: 10px 10px 30px;
+  float: left;
+  margin: 10px 10px 0;
   height: 140px;
   width: 300px;
   background-color: #fff;
@@ -125,19 +208,22 @@ export default {
   padding: 20px;
   float: left;
 }
-.tc-input-add p {
+.tc-input-title {
   font-size: 16px;
   text-align: left;
   line-height: 20px;
   margin-bottom: 10px;
   padding-left: 10px;
 }
+.tc-input-title span {
+  font-size: 12px;
+  color: #bbb;
+}
 .tc-input-add input {
   cursor: pointer;
   opacity: 0;
   position: relative;
   z-index: 3;
-  height: 40px;
   width: 100%;
 }
 .tc-input-add span {
@@ -175,9 +261,6 @@ export default {
   top: 45px;
   left: -1px;
   border-radius: 3px;
-  /* background-image: linear-gradient(to left, #fff0 -50%, #fff0 10%, #fffd 50%, #fff0 90%, #fff0 150%);
-  background-position-x: -50%;
-  transition: 1s; */
 }
 .tc-chaincode-add:hover {
   border-color: #014676;
@@ -185,7 +268,64 @@ export default {
 .tc-button-add:hover {
   color: #014676;
 }
+.tc-status-bar-uploading {
+  animation: prograss .3s linear infinite;
+  background-image: url(../assets/status_bar_prograss.png)
+}
+.tc-status-bar-failed {
+  background-color: #f78432;
+}
+.tc-chaincode-setinfo {
+  float: left;
+  margin: 10px 10px 0 0;
+  height: 140px;
+  box-sizing: border-box;
+  border-left: solid 6px #ddd;
+  transition: border-left-color .3s, opacity .6s;
+  opacity: 0;
+}
+.tc-chaincode-submit {
+  float: left;
+  margin: 10px 10px 0 0;
+  height: 140px;
+  width: 60px;
+  box-sizing: border-box;
+  transition: opacity .6s;
+  opacity: 0;
+  background-color: #0072c1;
+  padding: 0;
+}
+.tc-chaincode-submit .active {
+  background-color: #0d85da;
+  transform: translateX(10px);
+}
+.tc-chaincode-submit-button {
+  text-align: center;
+  color: #fff;
+  line-height: 140px;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  border-radius: 3px;
+  background-color: #bbb;
+  transition: .4s;
+}
+.tc-chaincode-submit .active:hover {
+  transform: translateX(6px);
+}
+#tc-chaincode-setinfo-name {
+  width: 160px;
+}
+#tc-chaincode-setinfo-version {
+  width: 100px;
+}
+#tc-chaincode-setinfo-desc {
+  width: 254px;
+  height: 70px;
+  line-height: 30px;
+}
 .tc-chaincode-lists {
+  margin-top: 30px;
   padding: 20px 0;
   width: 100%;
   border-top: solid 1px #ddd;
@@ -238,5 +378,14 @@ export default {
 }
 .tc-chaincode-r li:hover {
   transform: translateX(4px)
+}
+
+@keyframes prograss {
+  from {
+    background-position-x: 0px;
+  }
+  to {
+    background-position-x: 14px;
+  }
 }
 </style>

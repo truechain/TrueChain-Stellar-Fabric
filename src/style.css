@@ -1,6 +1,7 @@
 body {
   margin: 0;
   overflow: hidden;
+  font-size: 16px;
 }
 p, ul {
   margin: 0;
@@ -15,11 +16,23 @@ input {
   -moz-osx-font-smoothing: grayscale;
   font-size: inherit;
   box-sizing: border-box;
-  height: 30px;
+  height: 40px;
   border-radius: 3px;
   border: solid 1px #bbb;
   padding: 0 9px;
-  font-size: 14px;
+  font-size: 16px;
+  outline: none;
+}
+textarea {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: inherit;
+  box-sizing: border-box;
+  border-radius: 3px;
+  border: solid 1px #bbb;
+  padding: 4px 9px;
+  font-size: 16px;
   outline: none;
 }
 .tc-card {

@@ -58,10 +58,10 @@ export default {
   },
   methods: {
     signIn () {
-      api.enroll(this.username, this.orgname).then((response) => {
+      api.enroll(this.username, this.orgname).then((res) => {
         // do something to get token
-        if (response.status === 200) {
-          let data = response.data
+        if (res.status === 200) {
+          let data = res.data
           if (data.success) {
             let d = new Date()
             d.setMinutes(d.getMinutes + 30)
@@ -169,8 +169,8 @@ nav {
   width: 200px;
 }
 .tc-login div {
-  height: 30px;
-  line-height: 30px;
+  height: 40px;
+  line-height: 40px;
   margin-bottom: 20px;
   clear: both;
 }
