@@ -142,10 +142,12 @@ export default {
     })
   },
   uploadChaincode (fileName, file) {
-    return axios.post(fileUploadUrl + '/chaincode', {
-      params: {
-        fileName,
-        file
+    let formData = new FormData()
+    formData.append('fileName', fileName)
+    formData.append('file', file)
+    return axios.post(fileUploadUrl + '/chaincode', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
       }
     })
   }
