@@ -35,7 +35,7 @@
         <textarea id="tc-chaincode-setinfo-desc" v-model="ccInfo.description"/>
       </div>
       <div data-index="3" key="submit" v-show="uploadStatus === 'success'"  class="tc-chaincode-submit">
-        <div class="tc-chaincode-submit-button" :class="{'active': ccInfo.nameIsOk && ccInfo.versionIsOk}">Install</div>
+        <div @click.stop="installCc" class="tc-chaincode-submit-button" :class="{'active': ccInfo.nameIsOk && ccInfo.versionIsOk}">Install</div>
       </div>
     </transition-group>
     <div class="clear"></div>
@@ -61,6 +61,15 @@
 <script>
 import api from '@/api-config'
 
+const ccInfo = {
+  name: '',
+  nameIsOk: false,
+  version: '',
+  versionIsOk: false,
+  description: '',
+  descIsOk: false
+}
+
 export default {
   name: 'chaincode',
   data: () => {
@@ -69,14 +78,7 @@ export default {
       fileInput: null,
       chaincodeFileName: '',
       uploadStatus: 'end',
-      ccInfo: {
-        name: '',
-        nameIsOk: false,
-        version: '',
-        versionIsOk: false,
-        description: '',
-        descIsOk: false
-      }
+      ccInfo
     }
   },
   mounted () {
@@ -122,6 +124,7 @@ export default {
       this.chaincodeFileName = ''
       this.uploadStatus = 'end'
       this.isInputing = false
+      this.ccInfo = ccInfo
     },
     uploadChaincode () {
       if (!this.chaincodeFileName) {
@@ -156,6 +159,12 @@ export default {
         el.style.opacity = 0
       }, delay)
       setTimeout(done, delay + 600)
+    },
+    installCc () {
+      if (!ccInfo.nameIsOk || !ccInfo.versionIsOk) {
+        return
+      }
+      this.stopInput()
     }
   }
 }
