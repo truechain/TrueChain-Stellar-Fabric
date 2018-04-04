@@ -93,6 +93,11 @@ export default {
       height: 0
     }
   },
+  created () {
+    if (!window.cookieStorage.getItem('userToken')) {
+      this.$router.push('/')
+    }
+  },
   mounted () {
     this.height = this.$el.getBoundingClientRect().height
     this.$el.addEventListener('mousewheel', this.onMousewheel)

@@ -10,14 +10,14 @@ export default [
   //   component: Home
   // },
   {
-    path: '/chain',
-    name: 'Chain',
-    component: Chain
-  },
-  {
     path: '/chaincode',
     name: 'Chaincode',
     component: Chaincode
+  },
+  {
+    path: '/chain',
+    name: 'Chain',
+    component: Chain
   },
   {
     path: '/log',

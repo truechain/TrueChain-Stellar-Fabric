@@ -2,14 +2,18 @@
   <div id="tc-app">
     <nav :class="{'tc-nav-login': $route.name === null}">
       <img class="tc-nav-logo" src="./assets/logo.png" alt="logo" height="60">
-      <div v-if="$route.name !== null">
-        <div class="tc-nav-title" v-for="item in routes" :key="routes.indexOf(item)" :class="{'tc-nav-title-focus': $route.name === item.name}" @click="$router.push(item.path)">{{item.name}}</div>
-      </div>
-      <div class="tc-login" v-if="$route.name === null">
-        <div>Name<input type="text" v-model="username"></div>
-        <div>orgName<input type="text" v-model="orgname"></div>
-        <span @click.stop="signIn">Sign in</span>
-      </div>
+      <transition name="fly-right">
+        <div style="position: absolute; width: 100%;" v-if="$route.name !== null">
+          <div class="tc-nav-title" v-for="item in routes" :key="routes.indexOf(item)" :class="{'tc-nav-title-focus': $route.name === item.name}" @click="$router.push(item.path)">{{item.name}}</div>
+        </div>
+      </transition>
+      <transition name="fly-left">
+        <div style="position: absolute;" class="tc-login" v-if="$route.name === null">
+          <div>Name<input type="text" v-model="username"></div>
+          <div>orgName<input type="text" v-model="orgname"></div>
+          <span @click.stop="signIn">Sign in</span>
+        </div>
+      </transition>
     </nav>
     <div id="tc-content">
       <div id="tc-user" @mouseleave="closeUserCtrl" :class="{'tc-user-hide': $route.name === null, 'tc-user-ctrl-open': userCtrlisOpen}">
@@ -48,7 +52,9 @@ export default {
     }
   },
   mounted () {
+    this.userInfo.name = window.cookieStorage.getItem('userName')
     this.noticeBox = this.$el.querySelector('#tc-notice')
+    window.notice = this.notice
   },
   methods: {
     signIn () {
@@ -59,24 +65,22 @@ export default {
           if (data.success) {
             let d = new Date()
             d.setMinutes(d.getMinutes + 30)
-            window.cookieStorage.setItem('userToken', data.token, {
-              expires: d
-            })
+            window.cookieStorage.setItem('userToken', data.token, {expires: d})
+            window.cookieStorage.setItem('userName', this.username, {expires: d})
             this.userInfo.name = this.username
-            this.notice('#4596f5', `Log in as ${this.username}.`, 4000)
-            this.$router.push('/chain')
+            this.notice('#4596f5', `Log in as ${this.username}.`, 3000)
+            this.$router.push('/chaincode')
           } else {
-            this.notice('#f78432', 'Check out your orgName.', 4000)
+            this.notice('#f78432', 'Check out your orgName.', 3000)
           }
         }
       }).catch(() => {
-        this.notice('#d21107', 'Network error!', 3000)
+        this.notice('#d21107', 'Network Error!', 3000)
       })
     },
     signOut () {
-      window.cookieStorage.setItem('userToken', 'anyValue', {
-        expires: new Date()
-      })
+      window.cookieStorage.setItem('userToken', 'anyValue', {expires: new Date()})
+      window.cookieStorage.setItem('userName', 'anyValue', {expires: new Date()})
       this.$router.push('/')
     },
     openUserCtrl () {
@@ -201,12 +205,12 @@ nav {
   background-color: #fff;
   position: relative;
   z-index: 11;
-  transition: background-color .5s;
+  transition: background-color .6s;
 }
 .tc-user-ctrl {
   line-height: 60px;
   float: right;
-  transition: .5s;
+  transition: .6s;
   transform: translateX(100%)
 }
 .tc-user-ctrl span {
@@ -214,7 +218,7 @@ nav {
   font-size: 14px;
   color: #666;
   cursor: pointer;
-  transition: color .5s;
+  transition: color .6s;
 }
 .tc-user-ctrl span:hover {
   color: #014676;
@@ -239,5 +243,20 @@ nav {
   box-sizing: border-box;
   line-height: 20px;
   color: #fff;
+}
+
+.fly-right-enter-active, .fly-right-leave-active {
+  transition: transform 1s;
+}
+.fly-right-enter, .fly-right-leave-to {
+  transform: translateX(100%);
+}
+
+.fly-left-enter-active, .fly-left-leave-active {
+  transition: transform 1s, opacity 1s;
+}
+.fly-left-enter, .fly-left-leave-to {
+  transform: translateX(-50%);
+  opacity: 0;
 }
 </style>

@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const url = 'http://54.244.27.19:4000'
+const fileUploadUrl = 'http://54.244.27.19:5000'
 
 export default {
   enroll (username, orgName) {
@@ -16,7 +17,7 @@ export default {
     }
     return axios.post(url + '/channels', data, {
       headers: {
-        'authorization': 'Bearer' + window.cookieStorage.getItem('usertoken'),
+        'authorization': 'Bearer' + window.cookieStorage.getItem('userToken'),
         'content-type': 'application/json'
       }
     })
@@ -27,7 +28,7 @@ export default {
     }
     return axios.post(url + `/channels/${channelName}/peers`, data, {
       headers: {
-        'authorization': 'Bearer' + window.cookieStorage.getItem('usertoken'),
+        'authorization': 'Bearer' + window.cookieStorage.getItem('userToken'),
         'content-type': 'application/json'
       }
     })
@@ -41,7 +42,7 @@ export default {
     }
     return axios.post(url + '/chaincodes', data, {
       headers: {
-        'authorization': 'Bearer' + window.cookieStorage.getItem('usertoken'),
+        'authorization': 'Bearer' + window.cookieStorage.getItem('userToken'),
         'content-type': 'application/json'
       }
     })
@@ -54,7 +55,7 @@ export default {
     }
     return axios.post(url + `/channels/${channelName}/chaincodes`, data, {
       headers: {
-        'authorization': 'Bearer' + window.cookieStorage.getItem('usertoken'),
+        'authorization': 'Bearer' + window.cookieStorage.getItem('userToken'),
         'content-type': 'application/json'
       }
     })
@@ -66,7 +67,7 @@ export default {
     }
     return axios.post(url + `/channels/${channelName}/chaincodes/${chaincodeName}`, data, {
       headers: {
-        'authorization': 'Bearer' + window.cookieStorage.getItem('usertoken'),
+        'authorization': 'Bearer' + window.cookieStorage.getItem('userToken'),
         'content-type': 'application/json'
       }
     })
@@ -79,7 +80,7 @@ export default {
         args
       },
       headers: {
-        'authorization': 'Bearer' + window.cookieStorage.getItem('usertoken'),
+        'authorization': 'Bearer' + window.cookieStorage.getItem('userToken'),
         'content-type': 'application/json'
       }
     })
@@ -90,7 +91,7 @@ export default {
         peer
       },
       headers: {
-        'authorization': 'Bearer' + window.cookieStorage.getItem('usertoken'),
+        'authorization': 'Bearer' + window.cookieStorage.getItem('userToken'),
         'content-type': 'application/json'
       }
     })
@@ -101,7 +102,7 @@ export default {
         peer
       },
       headers: {
-        'authorization': 'Bearer' + window.cookieStorage.getItem('usertoken'),
+        'authorization': 'Bearer' + window.cookieStorage.getItem('userToken'),
         'content-type': 'application/json'
       }
     })
@@ -112,7 +113,7 @@ export default {
         peer
       },
       headers: {
-        'authorization': 'Bearer' + window.cookieStorage.getItem('usertoken'),
+        'authorization': 'Bearer' + window.cookieStorage.getItem('userToken'),
         'content-type': 'application/json'
       }
     })
@@ -124,7 +125,7 @@ export default {
         type // installed || instantiated
       },
       headers: {
-        'authorization': 'Bearer' + window.cookieStorage.getItem('usertoken'),
+        'authorization': 'Bearer' + window.cookieStorage.getItem('userToken'),
         'content-type': 'application/json'
       }
     })
@@ -135,8 +136,16 @@ export default {
         peer
       },
       headers: {
-        'authorization': 'Bearer' + window.cookieStorage.getItem('usertoken'),
+        'authorization': 'Bearer' + window.cookieStorage.getItem('userToken'),
         'content-type': 'application/json'
+      }
+    })
+  },
+  uploadChaincode (fileName, file) {
+    return axios.post(fileUploadUrl + '/chaincode', {
+      params: {
+        fileName,
+        file
       }
     })
   }
