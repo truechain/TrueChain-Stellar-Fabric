@@ -34,7 +34,7 @@
         <p class="tc-input-title">Description</p>
         <textarea id="tc-chaincode-setinfo-desc" v-model="ccInfo.description"/>
       </div>
-      <div data-index="3" key="submit" v-show="uploadStatus === 'success'"  class="tc-card tc-chaincode-submit">
+      <div data-index="3" key="submit" v-show="uploadStatus === 'success'"  class="tc-chaincode-submit">
         <div class="tc-chaincode-submit-button" :class="{'active': ccInfo.nameIsOk && ccInfo.versionIsOk}">Install</div>
       </div>
     </transition-group>
@@ -293,7 +293,8 @@ export default {
   transition: opacity .6s;
   opacity: 0;
   background-color: #0072c1;
-  padding: 0;
+  border-radius: 3px;
+  box-shadow: 0 2px 4px #0001;
 }
 .tc-chaincode-submit .active {
   background-color: #0d85da;
