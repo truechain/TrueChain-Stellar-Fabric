@@ -42,7 +42,7 @@
     <div class="tc-ccinfos">
       <ul class="tc-chaincode-lists">
         <li>
-          <div class="tc-card tc-chaincode">
+          <div class="tc-chaincode">
             <div class="tc-chaincode-l">
               <p class="tc-chaincode-name">Chaincode 1</p>
               <p class="tc-chaincode-intro">Introduction</p>
@@ -350,10 +350,11 @@ export default {
   padding: 10px;
 }
 .tc-chaincode {
-  padding: 0;
   height: 140px;
   width: 300px;
   background-color: #fff;
+  border-radius: 3px;
+  box-shadow: 0 2px 4px #0001;
   box-sizing: border-box;
   color: #333;
   border-left: solid 6px #091;
