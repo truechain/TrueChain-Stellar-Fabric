@@ -39,22 +39,25 @@
       </div>
     </transition-group>
     <div class="clear"></div>
-    <ul class="tc-chaincode-lists">
-      <li>
-        <div class="tc-card tc-chaincode">
-          <div class="tc-chaincode-l">
-            <p class="tc-chaincode-name">Chaincode 1</p>
-            <p class="tc-chaincode-intro">Introduction</p>
+    <div class="tc-ccinfos">
+      <ul class="tc-chaincode-lists">
+        <li>
+          <div class="tc-card tc-chaincode">
+            <div class="tc-chaincode-l">
+              <p class="tc-chaincode-name">Chaincode 1</p>
+              <p class="tc-chaincode-intro">Introduction</p>
+            </div>
+            <ul class="tc-chaincode-r">
+              <li class="tc-ccinfo-peer"></li>
+              <li class="tc-ccinfo-block"></li>
+              <li class="tc-ccinfo-trans"></li>
+            </ul>
           </div>
-          <ul class="tc-chaincode-r">
-            <li style="background-color:#f727b0;">1</li>
-            <li style="background-color:#3da3fe;margin:4px 0;">2</li>
-            <li style="background-color:#f9a942;">3</li>
-          </ul>
-        </div>
-      </li>
+        </li>
+        <div class="clear"></div>
+      </ul>
       <div class="clear"></div>
-    </ul>
+    </div>
   </div>
 </template>
 
@@ -334,11 +337,14 @@ export default {
   height: 70px;
   line-height: 30px;
 }
-.tc-chaincode-lists {
+.tc-ccinfos {
   margin-top: 30px;
   padding: 20px 0;
-  width: 100%;
   border-top: solid 1px #ddd;
+}
+.tc-chaincode-lists {
+  float: left;
+  width: 320px;
 }
 .tc-chaincode-lists li {
   padding: 10px;
@@ -384,12 +390,28 @@ export default {
   padding-right: 4px;
   color: #fff;
   cursor: pointer;
-  transition: transform .4s;
+  transition: opacity .4s;
+  opacity: .6;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: 80%;
 }
 .tc-chaincode-r li:hover {
-  transform: translateX(4px)
+  opacity: 1;
 }
-
+.tc-ccinfo-peer {
+  background-color: #f727b0;
+  background-image: url(../assets/icon/peer_small.png);
+}
+.tc-ccinfo-block {
+  background-color: #3da3fe;
+  background-image: url(../assets/icon/block_small.png);
+  margin:4px 0;
+}
+.tc-ccinfo-trans {
+  background-color: #f9a942;
+  background-image: url(../assets/icon/trans_small.png);
+}
 @keyframes prograss {
   from {
     background-position-x: 0px;
