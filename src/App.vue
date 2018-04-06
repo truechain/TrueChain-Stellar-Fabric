@@ -24,7 +24,7 @@
           <span @click.stop="signOut">Sign out</span>
         </div>
       </div>
-      <router-view/>
+      <router-view @routerinit="initRouterEl"/>
     </div>
     <div id="tc-notice"></div>
   </div>
@@ -109,6 +109,27 @@ export default {
         el.style.transform = 'translateY(110%)'
         this.noticeBoxTimer = 0
       }, delay + time)
+    },
+    initRouterEl (obj) {
+      if (!window.cookieStorage.getItem('userToken')) {
+        this.$router.push('/')
+      }
+      obj.updateSize = function () {
+        obj.height = obj.$el.getBoundingClientRect().height
+        obj.onMousewheel()
+      }
+      obj.onMousewheel = function (e) {
+        if (e) {
+          obj.pageTranslateY += e.deltaY > 0 ? -90 : 90
+        }
+        if (obj.pageTranslateY > 0) {
+          obj.pageTranslateY = 0
+        }
+        let contentH = window.innerHeight - 60
+        if (obj.height + obj.pageTranslateY < contentH) {
+          obj.pageTranslateY = Math.min(contentH - obj.height, 0)
+        }
+      }
     }
   }
 }

@@ -18,7 +18,7 @@ input {
   box-sizing: border-box;
   height: 40px;
   border-radius: 3px;
-  border: solid 1px #bbb;
+  border: solid 1px #ddd;
   padding: 0 9px;
   font-size: 16px;
   outline: none;
@@ -30,7 +30,7 @@ textarea {
   font-size: inherit;
   box-sizing: border-box;
   border-radius: 3px;
-  border: solid 1px #bbb;
+  border: solid 1px #ddd;
   padding: 4px 9px;
   font-size: 16px;
   outline: none;

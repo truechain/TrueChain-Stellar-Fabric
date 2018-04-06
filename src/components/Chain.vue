@@ -94,32 +94,12 @@ export default {
     }
   },
   created () {
-    if (!window.cookieStorage.getItem('userToken')) {
-      this.$router.push('/')
-    }
+    this.$emit('routerinit', this)
   },
   mounted () {
     this.height = this.$el.getBoundingClientRect().height
     this.$el.addEventListener('mousewheel', this.onMousewheel)
     window.addEventListener('resize', this.updateSize)
-  },
-  methods: {
-    updateSize () {
-      this.height = this.$el.getBoundingClientRect().height
-      this.onMousewheel()
-    },
-    onMousewheel (e) {
-      if (e) {
-        this.pageTranslateY += e.deltaY > 0 ? -90 : 90
-      }
-      if (this.pageTranslateY > 0) {
-        this.pageTranslateY = 0
-      }
-      let contentH = window.innerHeight - 60
-      if (this.height + this.pageTranslateY < contentH) {
-        this.pageTranslateY = Math.min(contentH - this.height, 0)
-      }
-    }
   }
 }
 </script>

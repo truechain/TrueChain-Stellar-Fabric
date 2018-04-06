@@ -1,6 +1,7 @@
 // import Home from '@/components/Home'
-import Chain from '@/components/Chain'
 import Chaincode from '@/components/Chaincode'
+import Invoke from '@/components/Invoke'
+import Chain from '@/components/Chain'
 import Log from '@/components/Log'
 
 export default [
@@ -13,6 +14,11 @@ export default [
     path: '/chaincode',
     name: 'Chaincode',
     component: Chaincode
+  },
+  {
+    path: '/invoke',
+    name: 'Invoke',
+    component: Invoke
   },
   {
     path: '/chain',

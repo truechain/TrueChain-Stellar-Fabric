@@ -81,10 +81,19 @@ export default {
       fileInput: null,
       chaincodeFileName: '',
       uploadStatus: 'end',
-      ccInfo
+      ccInfo,
+      pageTranslateY: 0,
+      height: 0
     }
   },
+  created () {
+    this.$emit('routerinit', this)
+  },
   mounted () {
+    this.height = this.$el.getBoundingClientRect().height
+    this.$el.addEventListener('mousewheel', this.onMousewheel)
+    window.addEventListener('resize', this.updateSize)
+
     this.fileInput = this.$el.querySelector('#tc-file-button')
     this.fileInput.addEventListener('change', (e) => {
       this.chaincodeFileName = this.fileInput.files[0].name
@@ -120,6 +129,13 @@ export default {
   },
   methods: {
     addChaincode () {
+      this.ccInfo.name = ''
+      this.ccInfo.nameIsOk = false
+      this.ccInfo.version = ''
+      this.ccInfo.versionIsOk = false
+      this.ccInfo.description = ''
+      this.ccInfo.descIsOk = false
+
       this.isInputing = true
     },
     stopInput () {
@@ -127,7 +143,6 @@ export default {
       this.chaincodeFileName = ''
       this.uploadStatus = 'end'
       this.isInputing = false
-      this.ccInfo = ccInfo
     },
     uploadChaincode () {
       if (!this.chaincodeFileName) {
