@@ -41,21 +41,24 @@
     <div class="clear"></div>
     <div class="tc-ccinfos">
       <ul class="tc-chaincode-lists">
-        <li>
+        <li v-for="item in ccList" :key="ccList.indexOf(item)">
           <div class="tc-chaincode">
             <div class="tc-chaincode-l">
-              <p class="tc-chaincode-name">Chaincode 1</p>
-              <p class="tc-chaincode-intro">Introduction</p>
+              <p class="tc-chaincode-name">{{item.name}}</p>
+              <p class="tc-chaincode-intro">{{item.intro}}</p>
             </div>
             <ul class="tc-chaincode-r">
-              <li class="tc-ccinfo-peer"></li>
-              <li class="tc-ccinfo-block"></li>
-              <li class="tc-ccinfo-trans"></li>
+              <li class="tc-ccinfo-peer" @click="loadCcInfo(item, 'peer')"></li>
+              <li class="tc-ccinfo-block" @click="loadCcInfo(item, 'block')"></li>
+              <li class="tc-ccinfo-trans" @click="loadCcInfo(item, 'trans')"></li>
             </ul>
           </div>
         </li>
         <div class="clear"></div>
       </ul>
+      <div class="tc-chaincode-info">
+        <p class="tc-chaincode-info-title">{{info.chaincode}} / {{info.type}}</p>
+      </div>
       <div class="clear"></div>
     </div>
   </div>
@@ -72,6 +75,10 @@ const ccInfo = {
   description: '',
   descIsOk: false
 }
+const ccList = [
+  {name:'Chaincode 1', key:'1', intro: 'Introduction'},
+  {name:'Chaincode 2', key:'2', intro: 'Introduction'}
+]
 
 export default {
   name: 'chaincode',
@@ -82,14 +89,22 @@ export default {
       chaincodeFileName: '',
       uploadStatus: 'end',
       ccInfo,
+      ccList,
       pageTranslateY: 0,
-      height: 0
+      height: 0,
+      info: {
+        chaincode: '',
+        type: ''
+      }
     }
   },
   created () {
     this.$emit('routerinit', this)
   },
   mounted () {
+    this.info.chaincode = this.ccList[0].name
+    this.info.type = 'peer'
+
     this.height = this.$el.getBoundingClientRect().height
     this.$el.addEventListener('mousewheel', this.onMousewheel)
     window.addEventListener('resize', this.updateSize)
@@ -183,6 +198,10 @@ export default {
         return
       }
       this.stopInput()
+    },
+    loadCcInfo (item, type) {
+      this.info.chaincode = item.name
+      this.info.type = type
     }
   }
 }
@@ -353,16 +372,30 @@ export default {
   line-height: 30px;
 }
 .tc-ccinfos {
+  display: flex;
+  flex-flow: row wrap-reverse;
   margin-top: 30px;
   padding: 20px 0;
   border-top: solid 1px #ddd;
 }
 .tc-chaincode-lists {
-  float: left;
-  width: 320px;
+  flex: 0 0 320px;
 }
 .tc-chaincode-lists li {
   padding: 10px;
+}
+.tc-chaincode-info {
+  flex: auto;
+  margin: 10px;
+  padding: 19px;
+  border: solid 1px #ddd;
+  background-color: #fff;
+  border-radius: 3px;
+}
+.tc-chaincode-info-title {
+  line-height: 22px;
+  padding-bottom: 7px;
+  border-bottom: solid 1px #ddd;
 }
 .tc-chaincode {
   height: 140px;
@@ -376,6 +409,7 @@ export default {
   overflow: hidden;
 }
 .tc-chaincode-name {
+  line-height: 22px;
   font-weight: 800;
 }
 .tc-chaincode-intro {
