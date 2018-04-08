@@ -76,8 +76,8 @@ const ccInfo = {
   descIsOk: false
 }
 const ccList = [
-  {name:'Chaincode 1', key:'1', intro: 'Introduction'},
-  {name:'Chaincode 2', key:'2', intro: 'Introduction'}
+  {name: 'Chaincode 1', key: '1', intro: 'Introduction'},
+  {name: 'Chaincode 2', key: '2', intro: 'Introduction'}
 ]
 
 export default {
