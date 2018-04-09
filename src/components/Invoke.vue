@@ -89,10 +89,10 @@ export default {
         let data = res.data
         let l = []
         for (let i = 0; i < data.length; i++) {
-          if (/path: (\S+)/.test(data)) {
+          if (/path: (\S+)/.test(data[i])) {
             l.push({
-              name: item.match(/name: (\S*),/)[1],
-              version: item.match(/version: (\S*),/)[1]
+              name: data[i].match(/name: (\S*),/)[1],
+              version: data[i].match(/version: (\S*),/)[1]
             })
           }
         }
