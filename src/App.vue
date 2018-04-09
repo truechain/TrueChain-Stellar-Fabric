@@ -10,7 +10,7 @@
       <transition name="fly-left">
         <div style="position: absolute;" class="tc-login" v-if="$route.name === null">
           <div>Name<input type="text" v-model="username"></div>
-          <div>orgName<input type="text" v-model="orgname"></div>
+          <div>orgName<input type="password" v-model="orgname"></div>
           <span @click.stop="signIn">Sign in</span>
         </div>
       </transition>
@@ -34,8 +34,6 @@
 import routes from './router/routes.js'
 import api from '@/api-config'
 
-window.api = api
-
 export default {
   name: 'App',
   data: () => {
@@ -52,6 +50,7 @@ export default {
     }
   },
   mounted () {
+    window.el = this
     this.userInfo.name = window.cookieStorage.getItem('userName')
     this.noticeBox = this.$el.querySelector('#tc-notice')
     window.notice = this.notice

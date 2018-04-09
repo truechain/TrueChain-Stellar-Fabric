@@ -103,7 +103,6 @@ export default {
     })
   },
   mounted () {
-    window.el = this
     this.height = this.$el.getBoundingClientRect().height
     this.$el.addEventListener('mousewheel', this.onMousewheel)
     window.addEventListener('resize', this.updateSize)
