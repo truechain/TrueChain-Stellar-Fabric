@@ -61,6 +61,8 @@
 </template>
 
 <script>
+import api from '@/api-config'
+
 export default {
   name: 'chain',
   data: () => {
@@ -95,6 +97,47 @@ export default {
   },
   created () {
     this.$emit('routerinit', this)
+
+    api.getChainInfo('mychannel', 'peer1').then((res) => {
+      this.baseInfo[1].value = res.data.height.low
+    }).catch(() => {
+      window.notice('#d21107', 'Network Error!', 3000)
+    })
+
+    api.queryChaincodes('peer1', 'installed').then((res) => {
+      if (typeof (res.data) === 'object') {
+        this.baseInfo[2].value = res.data.length
+      }
+    }).catch(() => {
+      window.notice('#d21107', 'Network Error!', 3000)
+    })
+
+    api.getBlock('mychannel', 19, 'peer1').then((res) => {
+      console.log('block 19 info----------------------------')
+      console.log(res.data)
+    })
+
+    // api.getBlock('mychannel', 20, 'peer1').then((res) => {
+    //   console.log('block 20 info----------------------------')
+    //   console.log(res.data)
+    // })
+
+    // api.getBlock('mychannel', 21, 'peer1').then((res) => {
+    //   console.log('block 21 info----------------------------')
+    //   console.log(res.data)
+    // })
+
+    // api.getBlock('mychannel', 22, 'peer1').then((res) => {
+    //   console.log('block 22 info----------------------------')
+    //   console.log(res.data)
+    // })
+
+    api.getTransaction('mychannel', '6660cd65e150925fb64f1483f7255367a1be756c014077d5a55f33fcbefb16af', 'peer1').then((res) => {
+      console.log('transaction info-------------------------')
+      console.log(res.data)
+    }).catch(() => {
+      window.notice('#d21107', 'Network Error!', 3000)
+    })
   },
   mounted () {
     this.height = this.$el.getBoundingClientRect().height

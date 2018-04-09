@@ -86,7 +86,7 @@ export default {
     })
   },
   getBlock (channelName, blockNumber, peer) {
-    return axios.get(url + `/channels/${channelName}/block/${blockNumber}`, {
+    return axios.get(url + `/channels/${channelName}/blocks/${blockNumber}`, {
       params: {
         peer
       },
