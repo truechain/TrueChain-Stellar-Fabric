@@ -1,5 +1,5 @@
 <template>
-  <div id="invoke">
+  <div id="invoke" :style="{transform: `translateY(${pageTranslateY}px)`}">
     <div class="tc-card tc-invoke-box">
       <ul class="tc-invoke-form">
         <li>
@@ -7,7 +7,10 @@
           <div @click.stop="openSelector" class="tc-invoke-form-input tc-invoke-form-cc" :class="{'green-border': submitStatus.chaincode}" >
             {{submitInfo.chaincode}}
             <ul class="tc-invoke-form-select" :class="{'close': closeSelect}">
-              <li v-for="item in chaincodeList" :key="chaincodeList.indexOf(item)" @click.stop="selectCc(item)">{{item.name}}</li>
+              <li v-for="item in chaincodeList" :key="chaincodeList.indexOf(item)" @click.stop="selectCc(item)">
+                <span class="name">{{item.name}}</span>
+                <span class="version">{{item.version}}</span>
+              </li>
               <li v-if="chaincodeList.length === 0" style="color: #bbb;">Not Found</li>
             </ul>
           </div>
@@ -22,8 +25,6 @@
           <span class="tc-invoke-form-label">Parameters</span>
           <transition-group tag="div" name="scale-y" class="tc-invoke-form-paras">
             <div v-for="item in submitInfo.paras" :key="item.index">
-              <input class="key" type="text" v-model="item.key">
-              <span>:</span>
               <input class="value" type="text" v-model="item.value">
               <div class="tc-incoke-para-remove" @click.stop="removeParameter(item)">+</div>
             </div>
@@ -42,7 +43,7 @@
         <li>
           <span class="tc-invoke-form-label"></span>
           <div id="tc-invoke-submit">
-            <div :class="{'active': inputValid}">call</div>
+            <div :class="{'active': inputValid && !isPause, 'waiting': isPause}" @click="callChaincodes">{{isPause ? 'wait...' : 'call'}}</div>
           </div>
           <div class="clear"></div>
         </li>
@@ -52,18 +53,15 @@
 </template>
 
 <script>
+import api from '@/api-config'
+
 const methods = ['Invoke', 'Query']
 
 export default {
   name: 'invoke',
   data: () => {
     return {
-      chaincodeList: [
-        {name: 'testData1', value: 'some value 1'},
-        {name: 'testData2', value: 'some value 2'},
-        {name: 'testData3', value: 'some value 3'},
-        {name: 'testData4', value: 'some value 4'}
-      ],
+      chaincodeList: [],
       methods,
       submitInfo: {
         chaincode: '',
@@ -78,12 +76,27 @@ export default {
         func: false
       },
       inputValid: false,
+      isPause: false,
       pageTranslateY: 0,
       height: 0
     }
   },
   created () {
     this.$emit('routerinit', this)
+
+    api.queryChaincodes('peer1', 'instantiated').then((res) => {
+      if (res.status === 200) {
+        let data = res.data
+        this.chaincodeList = data.map((item) => {
+          return {
+            name: item.match(/name: (\S*),/)[1],
+            version: item.match(/version: (\S*),/)[1]
+          }
+        })
+      }
+    }).catch(() => {
+      window.notice('#d21107', 'Network Error!', 3000)
+    })
   },
   mounted () {
     window.el = this
@@ -100,7 +113,7 @@ export default {
     },
     selectCc (item) {
       this.submitStatus.chaincode = true
-      this.submitInfo.chaincode = item.value
+      this.submitInfo.chaincode = item.name
       this.closeSelect = true
       this.checkInput()
     },
@@ -119,10 +132,17 @@ export default {
     },
     checkFuncInput () {
       this.submitStatus.func = this.submitInfo.funcName
+      if (this.submitInfo.funcName !== 'query') {
+        this.submitInfo.method = 'Invoke'
+      }
       this.checkInput()
     },
     selectMethod (item) {
       this.submitInfo.method = item
+      if (item === 'Query') {
+        this.submitInfo.funcName = 'query'
+        this.submitStatus.func = 'query'
+      }
       this.checkInput()
     },
     checkInput () {
@@ -131,6 +151,45 @@ export default {
         this.inputValid = true
       } else {
         this.inputValid = false
+      }
+    },
+    callChaincodes () {
+      if (!this.inputValid || this.isPause) {
+        return
+      }
+      let i = this.submitInfo
+      let args = i.paras.map((item) => {
+        return item.value
+      })
+      this.isPause = true
+      if (i.method === 'Invoke') {
+        api.invokeChaincode('mychannel', i.chaincode, i.funcName, args).then((res) => {
+          this.isPause = false
+          if (res.status === 200) {
+            let data = res.data
+            if (/Error/.test(data)) {
+              window.notice('#d21107', data, 4000)
+            } else {
+              window.notice('#4596f5', `Success! Transaction ID is: ${data}`, 4000)
+            }
+          }
+        }).catch(() => {
+          window.notice('#d21107', 'Network Error!', 3000)
+        })
+      } else if (i.method === 'Query') {
+        api.queryChaincode('mychannel', i.chaincode, 'peer1', i.funcName, JSON.stringify(args)).then((res) => {
+          this.isPause = false
+          if (res.status === 200) {
+            let data = res.data
+            if (/Error/.test(data)) {
+              window.notice('#d21107', data, 4000)
+            } else {
+              window.notice('#4596f5', `Success! ${data}`, 4000)
+            }
+          }
+        }).catch(() => {
+          window.notice('#d21107', 'Network Error!', 3000)
+        })
       }
     }
   }
@@ -155,7 +214,7 @@ export default {
   cursor: pointer;
   border: solid 1px #ddd;
   height: 40px;
-  width: 180px;
+  width: 280px;
   border-radius: 3px;
   position: relative;
   box-sizing: border-box;
@@ -188,6 +247,16 @@ export default {
 }
 .tc-invoke-form-select li:nth-child(odd) {
   background-color: #eee6;
+}
+.tc-invoke-form-select .name{
+  width: 160px;
+  display: block;
+  float: left;
+  overflow: hidden;
+}
+.tc-invoke-form-select .version{
+  float: right;
+  color: #bbb;
 }
 .tc-invoke-form-func {
   width: 160px;
@@ -312,6 +381,11 @@ export default {
 }
 #tc-invoke-submit .active:hover {
   transform: translateY(-3px);
+}
+#tc-invoke-submit .waiting {
+  background-color: #0072c1;
+  transform: translateY(0px);
+  cursor: default;
 }
 
 .scale-y-enter-active, .scale-y-leave-active {
