@@ -87,12 +87,16 @@ export default {
     api.queryChaincodes('peer1', 'instantiated').then((res) => {
       if (res.status === 200) {
         let data = res.data
-        this.chaincodeList = data.map((item) => {
-          return {
-            name: item.match(/name: (\S*),/)[1],
-            version: item.match(/version: (\S*),/)[1]
+        let l = []
+        for (let i = 0; i < data.length; i++) {
+          if (/path: (\S+)/.test(data)) {
+            l.push({
+              name: item.match(/name: (\S*),/)[1],
+              version: item.match(/version: (\S*),/)[1]
+            })
           }
-        })
+        }
+        this.chaincodeList = l
       }
     }).catch(() => {
       window.notice('#d21107', 'Network Error!', 3000)
