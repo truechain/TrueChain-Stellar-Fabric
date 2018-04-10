@@ -58,22 +58,20 @@ export default {
   methods: {
     signIn () {
       api.login(this.username, this.password).then((res) => {
-        if (res.status === 200) {
-          let data = res.data
-          if (data.success) {
-            let d = new Date()
-            d.setMinutes(d.getMinutes + 30)
-            window.cookieStorage.setItem('userToken', data.token, {expires: d})
-            window.cookieStorage.setItem('userName', this.username, {expires: d})
-            this.userInfo.name = this.username
-            this.notice('#4596f5', `Log in as ${this.username}.`, 3000)
-            this.$router.push('/chaincode')
-          } else {
-            this.notice('#f78432', 'Check out your orgName.', 3000)
-          }
+        let data = res.data
+        let d = new Date()
+        d.setMinutes(d.getMinutes + 30)
+        window.cookieStorage.setItem('userToken', data.token, {expires: d})
+        window.cookieStorage.setItem('userName', this.username, {expires: d})
+        this.userInfo.name = this.username
+        this.notice('#4596f5', `Log in as ${this.username}.`, 3000)
+        this.$router.push('/chaincode')
+      }).catch((err) => {
+        if (/403/.test(err)) {
+          this.notice('#f78432', 'Check out your Name & Password.', 3000)
+        } else {
+          this.notice('#d21107', 'Network Error!', 3000)
         }
-      }).catch(() => {
-        this.notice('#d21107', 'Network Error!', 3000)
       })
     },
     signOut () {

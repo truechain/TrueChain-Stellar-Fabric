@@ -153,10 +153,10 @@ export default {
     })
   },
   login (username, password) {
-    let data = {
-      username,
-      password
-    }
-    return axios.post(nodeServerUrl + '/auth', data)
+    let data = `username=${username}&password=${password}`
+    console.log(data)
+    return axios.post(nodeServerUrl + '/auth', data, {
+      headers: {'content-type': 'application/x-www-form-urlencoded'}
+    })
   }
 }
