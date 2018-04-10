@@ -103,7 +103,7 @@ export default {
       this.baseInfo[1].value = data.count
       this.transInfo = data.rows.map((item) => {
         return {
-          id: blockId,
+          id: item.blockId,
           hash: item.data_hash,
           trans: item.transNum,
           time: item.timestamp
