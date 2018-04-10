@@ -73,9 +73,9 @@ export default {
     return {
       baseInfo: [
         {name: 'Peer', value: '3', img: require('@/assets/icon/peer.png')},
-        {name: 'Block', value: '0', img: require('@/assets/icon/block.png')},
-        {name: 'Chaincode', value: '0', img: require('@/assets/icon/contract.png')},
-        {name: 'Transaction', value: '0', img: require('@/assets/icon/transaction.png')}
+        {name: 'Block', value: '...', img: require('@/assets/icon/block.png')},
+        {name: 'Chaincode', value: '...', img: require('@/assets/icon/contract.png')},
+        {name: 'Transaction', value: '...', img: require('@/assets/icon/transaction.png')}
       ],
       blockInfo: [
         // {id: 0, hash: 'b333288559db46ba9933fd30345fa4f415d533f5e852d5945d919e0e9d7bb87e', trans: 1, time: '2018-03-14 17:06:48'},
@@ -114,13 +114,18 @@ export default {
       this.baseInfo[2].value = window.installedCcInfo.length
     }
 
-    api.getBlock('mychannel', 1, 'peer1').then((res) => {
-      console.log('block 1 info-----------------------------')
+    api.getBlock('mychannel', 11, 'peer1').then((res) => {
+      console.log('block 11 info-----------------------------')
+      console.log(res.data)
+    })
+    api.getBlock('mychannel', 10, 'peer1').then((res) => {
+      console.log('block 10 info-----------------------------')
       console.log(res.data)
     })
     api.getRecentTrans().then((res) => {
       let data = res.data
-      this.transInfo = data.map((item) => {
+      this.baseInfo[3].value = data.count
+      this.transInfo = data.rows.map((item) => {
         return {
           hash: item.hash,
           time: item.timestamp
