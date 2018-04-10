@@ -147,26 +147,33 @@ export default {
   },
   methods: {
     queryCcList () {
-      let installedCc = api.queryChaincodes('peer1', 'installed')
+      let installedCc
+      if (!window.installedCcInfo) {
+        installedCc = api.queryChaincodes('peer1', 'installed')
+        installedCc.then((res) => {
+          window.installedCcInfo = res.data
+        })
+      } else {
+        installedCc = new Promise((resolve, reject) => {
+          resolve({ data: window.installedCcInfo })
+        })
+      }
       let instantiatedCc = api.queryChaincodes('peer1', 'instantiated')
       Promise.all([installedCc, instantiatedCc]).then((values) => {
-        let res = values[0]
+        let data = values[0].data
         let iData = values[1].data
-        if (res.status === 200) {
-          let data = res.data
-          this.ccList = data.map((item) => {
-            return {
-              name: item.match(/name: (\S*),/)[1],
-              version: item.match(/version: (\S*),/)[1],
-              isInstantiated: iData.indexOf(item) > -1,
-              args: '',
-              isWaiting: false
-            }
-          })
-          this.$nextTick(this.updateSize)
-          this.info.chaincode = this.ccList[0].name
-          this.info.type = 'peer'
-        }
+        this.ccList = data.map((item) => {
+          return {
+            name: item.match(/name: (\S*),/)[1],
+            version: item.match(/version: (\S*),/)[1],
+            isInstantiated: iData.indexOf(item) > -1,
+            args: '',
+            isWaiting: false
+          }
+        })
+        this.$nextTick(this.updateSize)
+        this.info.chaincode = this.ccList[0].name
+        this.info.type = 'peer'
       }).catch(() => {
         window.notice('#d21107', 'Network Error!', 3000)
       })
@@ -252,6 +259,7 @@ export default {
             window.notice('#d21107', data, 4000)
           } else {
             window.notice('#4596f5', data, 4000)
+            window.installedCcInfo = false
             this.queryCcList()
           }
         }
