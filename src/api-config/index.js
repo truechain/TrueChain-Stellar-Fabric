@@ -82,7 +82,7 @@ export default {
         args
       }
     }
-    return axios.post(nodeServerUrl + 'invoke', data, {
+    return axios.post(nodeServerUrl + '/invoke', data, {
       headers: {
         'content-type': 'application/json'
       }
@@ -174,5 +174,8 @@ export default {
     return axios.post(nodeServerUrl + '/auth', data, {
       headers: {'content-type': 'application/x-www-form-urlencoded'}
     })
+  },
+  getRecentTrans () {
+    return axios.get(nodeServerUrl + '/transaction')
   }
 }

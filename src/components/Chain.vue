@@ -118,31 +118,13 @@ export default {
       console.log('block 1 info-----------------------------')
       console.log(res.data)
     })
-
-    // api.getBlock('mychannel', 20, 'peer1').then((res) => {
-    //   console.log('block 20 info----------------------------')
-    //   console.log(res.data)
-    // })
-
-    // api.getBlock('mychannel', 21, 'peer1').then((res) => {
-    //   console.log('block 21 info----------------------------')
-    //   console.log(res.data)
-    // })
-
-    // api.getBlock('mychannel', 22, 'peer1').then((res) => {
-    //   console.log('block 22 info----------------------------')
-    //   console.log(res.data)
-    // })
-    // 25e6ef311706fab576c8bd4945c311cbfbbe2ed5489872ff7aab0da3f6a22be3
-    // dcee5b25701af5599af9cb8802de6a75a4515af8b3708b3973f7a91dd055bb67
-    api.getTransaction('mychannel', '25e6ef311706fab576c8bd4945c311cbfbbe2ed5489872ff7aab0da3f6a22be3', 'peer1').then((res) => {
-      console.log('transaction info-------------------------')
-      let payload = res.data.transactionEnvelope.payload
-      console.log('time: ' + payload.header.channel_header.timestamp)
-      console.log('id: ' + payload.header.channel_header.tx_id)
-      this.transInfo.push({
-        hash: payload.header.channel_header.tx_id,
-        time: payload.header.channel_header.timestamp
+    api.getRecentTrans().then((res) => {
+      let data = res.data
+      this.transInfo = data.map((item) => {
+        return {
+          hash: item.hash,
+          time: item.timestamp
+        }
       })
     }).catch(() => {
       window.notice('#d21107', 'Network Error! Can not get the transaction info!', 3000)
