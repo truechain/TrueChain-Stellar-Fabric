@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const url = 'http://54.244.27.19:4000'
-const fileUploadUrl = 'http://54.244.27.19:5000'
+const nodeServerUrl = 'http://54.244.27.19:5000'
 
 export default {
   enroll (username, orgName) {
@@ -146,7 +146,7 @@ export default {
     formData.append('fileName', fileName)
     formData.append('filePath', fileName.split('.')[0])
     formData.append('file', file)
-    return axios.post(fileUploadUrl + '/chaincode', formData, {
+    return axios.post(nodeServerUrl + '/chaincode', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
