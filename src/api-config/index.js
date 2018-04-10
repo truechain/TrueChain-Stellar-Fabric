@@ -60,14 +60,30 @@ export default {
       }
     })
   },
+  // invokeChaincode (channelName, chaincodeName, fcn, args) {
+  //   let data = {
+  //     fcn,
+  //     args
+  //   }
+  //   return axios.post(url + `/channels/${channelName}/chaincodes/${chaincodeName}`, data, {
+  //     headers: {
+  //       'authorization': 'Bearer ' + window.cookieStorage.getItem('userToken'),
+  //       'content-type': 'application/json'
+  //     }
+  //   })
+  // },
   invokeChaincode (channelName, chaincodeName, fcn, args) {
     let data = {
-      fcn,
-      args
+      channelName,
+      chaincodeName,
+      token: window.cookieStorage.getItem('userToken'),
+      data: {
+        fcn,
+        args
+      }
     }
-    return axios.post(url + `/channels/${channelName}/chaincodes/${chaincodeName}`, data, {
+    return axios.post(nodeServerUrl + 'invoke', data, {
       headers: {
-        'authorization': 'Bearer ' + window.cookieStorage.getItem('userToken'),
         'content-type': 'application/json'
       }
     })

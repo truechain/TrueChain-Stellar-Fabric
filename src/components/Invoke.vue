@@ -177,6 +177,7 @@ export default {
             }
           }
         }).catch(() => {
+          this.isPause = false
           window.notice('#d21107', 'Network Error!', 3000)
         })
       } else if (i.method === 'Query') {
@@ -191,6 +192,7 @@ export default {
             }
           }
         }).catch(() => {
+          this.isPause = false
           window.notice('#d21107', 'Network Error!', 3000)
         })
       }
