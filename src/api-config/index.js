@@ -177,5 +177,8 @@ export default {
   },
   getRecentTrans () {
     return axios.get(nodeServerUrl + '/transaction')
+  },
+  getRecentBlock () {
+    return axios.get(nodeServerUrl + '/block')
   }
 }
