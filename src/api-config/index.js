@@ -151,5 +151,12 @@ export default {
         'Content-Type': 'multipart/form-data'
       }
     })
+  },
+  login (username, password) {
+    let data = {
+      username,
+      password
+    }
+    return axios.post(nodeServerUrl + '/auth', data)
   }
 }

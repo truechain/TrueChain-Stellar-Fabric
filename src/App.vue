@@ -10,7 +10,7 @@
       <transition name="fly-left">
         <div style="position: absolute;" class="tc-login" v-if="$route.name === null">
           <div>Name<input type="text" v-model="username"></div>
-          <div>orgName<input type="password" v-model="orgname"></div>
+          <div>Password<input type="password" v-model="password"></div>
           <span @click.stop="signIn">Sign in</span>
         </div>
       </transition>
@@ -43,7 +43,7 @@ export default {
         name: ''
       },
       username: '',
-      orgname: '',
+      password: '',
       userCtrlisOpen: false,
       noticeBox: null,
       noticeBoxTimer: 0
@@ -57,8 +57,7 @@ export default {
   },
   methods: {
     signIn () {
-      api.enroll(this.username, this.orgname).then((res) => {
-        // do something to get token
+      api.login(this.username, this.password).then((res) => {
         if (res.status === 200) {
           let data = res.data
           if (data.success) {
