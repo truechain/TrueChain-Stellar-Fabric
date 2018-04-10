@@ -28,7 +28,7 @@
             </tr>
             <tr v-for="item in blockInfo" :key="blockInfo.indexOf(item)">
               <td>{{item.id}}</td>
-              <td>{{item.hash.slice(0, 15)}}...</td>
+              <td>{{item.hash}}</td>
               <td>{{item.trans}}</td>
               <td>{{item.time}}</td>
             </tr>
@@ -101,7 +101,7 @@ export default {
       let data = res.data
       this.baseInfo[0].value = 3
       this.baseInfo[1].value = data.count
-      this.transInfo = data.rows.map((item) => {
+      this.blockInfo = data.rows.map((item) => {
         return {
           id: item.blockId,
           hash: item.data_hash,
