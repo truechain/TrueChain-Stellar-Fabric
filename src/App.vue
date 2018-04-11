@@ -77,6 +77,9 @@ export default {
     signOut () {
       window.cookieStorage.setItem('userToken', 'anyValue', {expires: new Date()})
       window.cookieStorage.setItem('userName', 'anyValue', {expires: new Date()})
+      if (window.installedCcInf) {
+        window.installedCcInf = false
+      }
       this.$router.push('/')
     },
     openUserCtrl () {
