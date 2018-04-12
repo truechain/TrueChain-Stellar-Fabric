@@ -240,6 +240,7 @@ export default {
         if (res.status === 200) {
           window.notice('#4596f5', res.data, 3000)
         }
+        window.installedCcInfo = false
         this.queryCcList()
       }).catch(() => {
         window.notice('#d21107', 'Network Error!', 3000)
