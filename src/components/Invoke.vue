@@ -167,7 +167,6 @@ export default {
       this.isPause = true
       if (i.method === 'Invoke') {
         api.invokeChaincode('mychannel', i.chaincode, i.funcName, args).then((res) => {
-          this.isPause = false
           if (res.status === 200) {
             let data = res.data
             if (/Error/.test(data)) {
@@ -177,12 +176,12 @@ export default {
             }
           }
         }).catch(() => {
-          this.isPause = false
           window.notice('#d21107', 'Network Error!', 3000)
+        }).then(() => {
+          this.isPause = false
         })
       } else if (i.method === 'Query') {
         api.queryChaincode('mychannel', i.chaincode, 'peer1', i.funcName, JSON.stringify(args)).then((res) => {
-          this.isPause = false
           if (res.status === 200) {
             let data = res.data
             if (/Error/.test(data)) {
@@ -192,8 +191,9 @@ export default {
             }
           }
         }).catch(() => {
-          this.isPause = false
           window.notice('#d21107', 'Network Error!', 3000)
+        }).then(() => {
+          this.isPause = false
         })
       }
     }

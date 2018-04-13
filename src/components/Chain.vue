@@ -99,7 +99,7 @@ export default {
 
     api.getRecentBlock().then((res) => {
       let data = res.data
-      this.baseInfo[0].value = 3
+      this.baseInfo[0].value = 4
       this.baseInfo[1].value = data.count
       this.blockInfo = data.rows.map((item) => {
         return {
@@ -109,6 +109,7 @@ export default {
           time: item.timestamp
         }
       })
+      this.$nextTick(this.updateSize)
     })
     api.getRecentTrans().then((res) => {
       let data = res.data
@@ -119,6 +120,7 @@ export default {
           time: item.timestamp
         }
       })
+      this.$nextTick(this.updateSize)
     }).catch(() => {
       window.notice('#d21107', 'Network Error! Can not get the transaction info!', 3000)
     })

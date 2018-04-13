@@ -12,10 +12,12 @@
           <div>Name<input type="text" v-model="username"></div>
           <div>Password<input type="password" v-model="password"></div>
           <span @click.stop="signIn">Sign in</span>
+          <loading-animation :color="'#fff'" :isActive="signInWaiting"></loading-animation>
         </div>
       </transition>
     </nav>
     <div id="tc-content">
+      <hello v-if="$route.name === null"></hello>
       <div id="tc-user" @mouseleave="closeUserCtrl" :class="{'tc-user-hide': $route.name === null, 'tc-user-ctrl-open': userCtrlisOpen}">
         <div class="tc-user-info" @mouseover="openUserCtrl">
           {{userInfo.name}}
@@ -31,8 +33,11 @@
 </template>
 
 <script>
-import routes from './router/routes.js'
+import routes from '@/router/routes.js'
 import api from '@/api-config'
+
+import Hello from '@/components/Hello'
+import loadingAnimation from '@/components/common/gui/loading'
 
 export default {
   name: 'App',
@@ -44,6 +49,7 @@ export default {
       },
       username: '',
       password: '',
+      signInWaiting: false,
       userCtrlisOpen: false,
       noticeBox: null,
       noticeBoxTimer: 0
@@ -57,6 +63,10 @@ export default {
   },
   methods: {
     signIn () {
+      if (this.signInWaiting) {
+        return
+      }
+      this.signInWaiting = true
       api.login(this.username, this.password).then((res) => {
         let data = res.data
         let d = new Date()
@@ -72,6 +82,8 @@ export default {
         } else {
           this.notice('#d21107', 'Network Error!', 3000)
         }
+      }).then(() => {
+        this.signInWaiting = false
       })
     },
     signOut () {
@@ -130,6 +142,10 @@ export default {
         }
       }
     }
+  },
+  components: {
+    Hello,
+    loadingAnimation
   }
 }
 </script>
@@ -197,11 +213,12 @@ nav {
 .tc-login span {
   width: 80px;
   float: left;
-  line-height: 30px;
+  line-height: 40px;
   /* clear: both; */
   cursor: pointer;
 }
 #tc-content {
+  position: relative;
   flex: auto;
   background-color: #f0f4f8;
 }
