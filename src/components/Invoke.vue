@@ -201,7 +201,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #invoke {
   padding: 30px;
 }

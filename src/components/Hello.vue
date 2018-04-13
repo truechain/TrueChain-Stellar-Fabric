@@ -140,7 +140,7 @@ export default {
 }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 .green-border
   border-left solid 6px #091
 #hellopage
