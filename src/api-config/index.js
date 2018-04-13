@@ -174,6 +174,13 @@ export default {
       headers: {'content-type': 'application/x-www-form-urlencoded'}
     })
   },
+  signup (username, password, code) {
+    return axios.post(nodeServerUrl + '/signup', {
+      username,
+      password,
+      code
+    })
+  },
   getRecentTrans () {
     return axios.get(nodeServerUrl + '/transaction')
   },

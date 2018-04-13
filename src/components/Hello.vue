@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import api from '@/api-config'
+
 import loadingAnimation from '@/components/common/gui/loading'
 import passwordStrength from 'owasp-password-strength-test'
 passwordStrength.config({
@@ -87,9 +89,19 @@ export default {
     signButtonClicked () {
       if (this.isOpen) {
         if (this.signUpWaiting) {
-          return
+          return window.notice('#f78432', 'Do not submit requests frequently.', 3000)
         } else if (this.nameIsOk && this.passwordIsOk && this.repeatIsOk) {
           this.signUpWaiting = true
+          api.signup(this.name, this.password, this.invtCode).then(res => {
+            if (res.data.success) {
+              window.notice('#4596f5', `Sign up successfully. Welcome ${this.name}`, 3000)
+              this.stopSignUp()
+            } else {
+              return window.notice('#f78432', res.data.message, 4000)
+            }
+          }).catch(() => {
+            window.notice('#d21107', 'Network Error!', 3000)
+          }).then(() => { this.signUpWaiting = false })
         } else {
           window.notice('#f78432', 'Check out your Input.', 3000)
         }
