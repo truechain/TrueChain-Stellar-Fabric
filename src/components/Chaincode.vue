@@ -147,36 +147,21 @@ export default {
   },
   methods: {
     queryCcList () {
-      let installedCc
-      if (!window.installedCcInfo) {
-        installedCc = api.queryChaincodes('peer1', 'installed')
-        installedCc.then((res) => {
-          window.installedCcInfo = res.data
-        })
-      } else {
-        installedCc = new Promise((resolve, reject) => {
-          resolve({ data: window.installedCcInfo })
-        })
-      }
-      let instantiatedCc = api.queryChaincodes('peer1', 'instantiated')
-      Promise.all([installedCc, instantiatedCc]).then((values) => {
-        let data = values[0].data
-        let iData = values[1].data
-        this.ccList = data.map((item) => {
+      api.queryChaincodes().then(res => {
+        this.ccList = res.data.map(item => {
           return {
-            name: item.match(/name: (\S*),/)[1],
-            version: item.match(/version: (\S*),/)[1],
-            isInstantiated: iData.indexOf(item) > -1,
-            args: '',
-            isWaiting: false
+            name: item.name,
+            version: item.version,
+            isWaiting: false,
+            isInstantiated: item.isInstantiated,
+            args: ''
           }
         })
+      })
+        
         this.$nextTick(this.updateSize)
         this.info.chaincode = this.ccList[0].name
         this.info.type = 'peer'
-      }).catch(() => {
-        window.notice('#d21107', 'Network Error!', 3000)
-      })
     },
     addChaincode () {
       this.ccInfo.name = ''
@@ -236,10 +221,8 @@ export default {
         return
       }
       let i = this.ccInfo
-      api.installChaincode(['peer1', 'peer2'], i.name, this.chaincodePath, i.version).then((res) => {
-        if (res.status === 200) {
-          window.notice('#4596f5', res.data, 3000)
-        }
+      api.installChaincode(i.name, this.chaincodePath, i.version).then((res) => {
+        window.notice('#4596f5', res.data, 3000)
         window.installedCcInfo = false
         this.queryCcList()
       }).catch(() => {

@@ -33,19 +33,29 @@ export default {
       }
     })
   },
-  installChaincode (peers, chaincodeName, chaincodePath, chaincodeVersion) {
+  // installChaincode (peers, chaincodeName, chaincodePath, chaincodeVersion) {
+  //   let data = {
+  //     peers,
+  //     chaincodeName,
+  //     chaincodePath,
+  //     chaincodeVersion
+  //   }
+  //   return axios.post(url + '/chaincodes', data, {
+  //     headers: {
+  //       'authorization': 'Bearer ' + window.cookieStorage.getItem('userToken'),
+  //       'content-type': 'application/json'
+  //     }
+  //   })
+  // },
+  installChaincode (chaincodeName, chaincodePath, chaincodeVersion) {
     let data = {
-      peers,
+      username: window.cookieStorage.getItem('userName'),
       chaincodeName,
       chaincodePath,
-      chaincodeVersion
+      chaincodeVersion,
+      token: window.cookieStorage.getItem('userToken')
     }
-    return axios.post(url + '/chaincodes', data, {
-      headers: {
-        'authorization': 'Bearer ' + window.cookieStorage.getItem('userToken'),
-        'content-type': 'application/json'
-      }
-    })
+    return axios.post(nodeServerUrl + '/chaincodes', data)
   },
   instantiateChaincode (channelName, chaincodeName, chaincodeVersion, args) {
     let data = {
@@ -134,16 +144,21 @@ export default {
       }
     })
   },
-  queryChaincodes (peer, type) {
-    return axios.get(url + '/chaincodes', {
-      params: {
-        peer,
-        type // installed || instantiated
-      },
-      headers: {
-        'authorization': 'Bearer ' + window.cookieStorage.getItem('userToken'),
-        'content-type': 'application/json'
-      }
+  // queryChaincodes (peer, type) {
+  //   return axios.get(url + '/chaincodes', {
+  //     params: {
+  //       peer,
+  //       type // installed || instantiated
+  //     },
+  //     headers: {
+  //       'authorization': 'Bearer ' + window.cookieStorage.getItem('userToken'),
+  //       'content-type': 'application/json'
+  //     }
+  //   })
+  // },
+  queryChaincodes () {
+    return axios.get(nodeServerUrl + '/chaincodes', {
+      params: {username: window.cookieStorage.getItem('userName')}
     })
   },
   getChannels (peer) {
