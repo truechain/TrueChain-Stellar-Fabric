@@ -57,43 +57,42 @@ export default {
     }
     return axios.post(nodeServerUrl + '/chaincodes', data)
   },
-  instantiateChaincode (channelName, chaincodeName, chaincodeVersion, args) {
-    let data = {
-      chaincodeName,
-      chaincodeVersion,
-      args
-    }
-    return axios.post(url + `/channels/${channelName}/chaincodes`, data, {
-      headers: {
-        'authorization': 'Bearer ' + window.cookieStorage.getItem('userToken'),
-        'content-type': 'application/json'
-      }
-    })
-  },
-  // invokeChaincode (channelName, chaincodeName, fcn, args) {
+  // instantiateChaincode (channelName, chaincodeName, chaincodeVersion, args) {
   //   let data = {
-  //     fcn,
+  //     chaincodeName,
+  //     chaincodeVersion,
   //     args
   //   }
-  //   return axios.post(url + `/channels/${channelName}/chaincodes/${chaincodeName}`, data, {
+  //   return axios.post(url + `/channels/${channelName}/chaincodes`, data, {
   //     headers: {
   //       'authorization': 'Bearer ' + window.cookieStorage.getItem('userToken'),
   //       'content-type': 'application/json'
   //     }
   //   })
   // },
-  invokeChaincode (channelName, chaincodeName, fcn, args) {
+  instantiateChaincode (channelName, chaincodeName, chaincodeVersion, args) {
     let data = {
+      username: window.cookieStorage.getItem('userName'),
       channelName,
       chaincodeName,
-      token: window.cookieStorage.getItem('userToken'),
-      data: {
-        fcn,
-        args
-      }
+      chaincodeVersion,
+      args,
+      token: window.cookieStorage.getItem('userToken')
     }
-    return axios.post(nodeServerUrl + '/invoke', data, {
+    return axios.post(nodeServerUrl + '/chaincodes/instantiate', data, {
       headers: {
+        'content-type': 'application/json'
+      }
+    })
+  },
+  invokeChaincode (channelName, chaincodeName, fcn, args) {
+    let data = {
+      fcn,
+      args
+    }
+    return axios.post(url + `/channels/${channelName}/chaincodes/${chaincodeName}`, data, {
+      headers: {
+        'authorization': 'Bearer ' + window.cookieStorage.getItem('userToken'),
         'content-type': 'application/json'
       }
     })

@@ -158,10 +158,10 @@ export default {
           }
         })
       })
-        
-        this.$nextTick(this.updateSize)
-        this.info.chaincode = this.ccList[0].name
-        this.info.type = 'peer'
+
+      this.$nextTick(this.updateSize)
+      // this.info.chaincode = this.ccList[0].name
+      // this.info.type = 'peer'
     },
     addChaincode () {
       this.ccInfo.name = ''

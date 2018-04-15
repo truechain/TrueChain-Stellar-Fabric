@@ -84,20 +84,18 @@ export default {
   created () {
     this.$emit('routerinit', this)
 
-    api.queryChaincodes('peer1', 'instantiated').then((res) => {
-      if (res.status === 200) {
-        let data = res.data
-        let l = []
-        for (let i = 0; i < data.length; i++) {
-          if (/path: (\S+)/.test(data[i])) {
-            l.push({
-              name: data[i].match(/name: (\S*),/)[1],
-              version: data[i].match(/version: (\S*),/)[1]
-            })
-          }
+    api.queryChaincodes().then(res => {
+      let data = res.data
+      let l = []
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].isInstantiated) {
+          l.push({
+            name: data[i].name,
+            version: data[i].version
+          })
         }
-        this.chaincodeList = l
       }
+      this.chaincodeList = l
     }).catch(() => {
       window.notice('#d21107', 'Network Error!', 3000)
     })
