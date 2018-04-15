@@ -17,7 +17,7 @@
           Repeat<input type="password" v-model="repeat" :class="{'green-border': repeatIsOk}" @change="repeatPassword">
           <p class="msg">{{repeatCheckMsg}}</p>
         </li>
-        <li>Invitation code<input type="text" v-model="invtCode"></li>
+        <li>Invitation code<input type="text" v-model="invtCode"><a class="get-invt-code" target="_blank" href="http://cn.mikecrm.com/aeT0QGF">get invitation code</a></li>
       </ul>
       <div class="sign-up" :class="{'sign-up-button': isOpen}" >
         <span @click="signButtonClicked">Sign up</span>
@@ -177,6 +177,7 @@ export default {
     line-height 40px
     margin-bottom 20px
     width 320px
+    position relative
   input
     float right
   .msg
@@ -206,4 +207,12 @@ export default {
   .sign-up-button
     font-size 1em
     transform translateX(10px)
+  .get-invt-code
+    display block
+    position absolute
+    bottom -30px
+    right 0px
+    font-size 12px
+    color #014676
+    text-decoration-line none
 </style>
