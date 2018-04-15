@@ -159,7 +159,7 @@ export default {
         })
       })
 
-      this.$nextTick(this.updateSize)
+      setTimeout(this.updateSize, 1000)
       // this.info.chaincode = this.ccList[0].name
       // this.info.type = 'peer'
     },
@@ -247,9 +247,10 @@ export default {
             this.queryCcList()
           }
         }
-        item.isWaiting = false
       }).catch(() => {
         window.notice('#d21107', 'Network Error!', 3000)
+      }).then(() => {
+        item.isWaiting = false
       })
     }
   }

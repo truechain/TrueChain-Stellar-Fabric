@@ -98,6 +98,7 @@ export default {
     }
 
     api.getRecentBlock().then((res) => {
+      console.log(res)
       let data = res.data
       this.baseInfo[0].value = 4
       this.baseInfo[1].value = data.count
