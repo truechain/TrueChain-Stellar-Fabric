@@ -4,7 +4,7 @@
       <ul class="tc-invoke-form">
         <li>
           <span class="tc-invoke-form-label">Chaincode</span>
-          <div @click.stop="openSelector" class="tc-invoke-form-input tc-invoke-form-cc" :class="{'green-border': submitStatus.chaincode}" >
+          <div @click.stop="openSelector" class="tc-invoke-form-input tc-invoke-form-cc" :class="{'green-border': submitStatus.chaincode, 'gray-border': isLoadingCcList}" >
             {{submitInfo.chaincode}}
             <ul class="tc-invoke-form-select" :class="{'close': closeSelect}">
               <li v-for="item in chaincodeList" :key="chaincodeList.indexOf(item)" @click.stop="selectCc(item)">
@@ -14,6 +14,7 @@
               <li v-if="chaincodeList.length === 0" style="color: #bbb;">Not Found</li>
             </ul>
           </div>
+          <loading-animation class="tc-invoke-loading" :color="'#bbb'" :isActive="isLoadingCcList"></loading-animation>
           <div class="clear"></div>
         </li>
         <li>
@@ -53,6 +54,7 @@
 </template>
 
 <script>
+import loadingAnimation from '@/components/common/gui/loading'
 import api from '@/api-config'
 
 const methods = ['Invoke', 'Query']
@@ -62,6 +64,7 @@ export default {
   data: () => {
     return {
       chaincodeList: [],
+      isLoadingCcList: false,
       methods,
       submitInfo: {
         chaincode: '',
@@ -84,6 +87,7 @@ export default {
   created () {
     this.$emit('routerinit', this)
 
+    this.isLoadingCcList = true
     api.queryChaincodes().then(res => {
       let data = res.data
       let l = []
@@ -98,6 +102,8 @@ export default {
       this.chaincodeList = l
     }).catch(() => {
       window.notice('#d21107', 'Network Error!', 3000)
+    }).then(() => {
+      this.isLoadingCcList = false
     })
   },
   mounted () {
@@ -195,6 +201,9 @@ export default {
         })
       }
     }
+  },
+  components: {
+    loadingAnimation
   }
 }
 </script>
@@ -224,6 +233,7 @@ export default {
   line-height: 38px;
   padding: 0 9px;
   border-right: solid 6px #d21107;
+  transition: border-right-color .6s;
 }
 .close {
   height: 0 !important;
@@ -239,7 +249,7 @@ export default {
   left: -1px;
   top: 44px;
   overflow-y: scroll;
-  transition: .6s;
+  transition: height .6s, opacity .6s;
 }
 .tc-invoke-form-select li {
   height: 40px;
@@ -261,6 +271,9 @@ export default {
   float: right;
   color: #bbb;
 }
+.tc-invoke-loading {
+  margin: 10px;
+}
 .tc-invoke-form-func {
   width: 160px;
   border-right: solid 6px #d21107;
@@ -268,6 +281,9 @@ export default {
 }
 .green-border {
   border-right-color: #091;
+}
+.gray-border {
+  border-right-color: #bbb;
 }
 .tc-invoke-form-label {
   width: 20%;

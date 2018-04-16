@@ -36,7 +36,8 @@
           <!-- <div v-if="blockPagedInfo.isPaged" class="tc-page-ctrl">
             <input type="text" v-model="blockPagedInfo.nowInPage"> / {{blockPagedInfo.pageNum}}
           </div> -->
-          <div v-if="blockInfo.length === 0" class="no-data">No data</div>
+          <loading-animation v-if="isLoadingBlocks" class="tc-chain-loading" :color="'#ddd'" :isActive="true"></loading-animation>
+          <div v-if="!isLoadingBlocks && blockInfo.length === 0" class="no-data">No data</div>
         </div>
       </li>
       <li>
@@ -56,7 +57,8 @@
               <td>{{item.time}}</td>
             </tr>
           </table>
-          <div v-if="transInfo.length === 0" class="no-data">No data</div>
+          <loading-animation v-if="isLoadingTrans" class="tc-chain-loading" :color="'#ddd'" :isActive="true"></loading-animation>
+          <div v-if="!isLoadingTrans && transInfo.length === 0" class="no-data">No data</div>
         </div>
       </li>
     </ul>
@@ -65,6 +67,7 @@
 </template>
 
 <script>
+import loadingAnimation from '@/components/common/gui/loading'
 import api from '@/api-config'
 
 export default {
@@ -84,6 +87,8 @@ export default {
         nowInPage: 5
       },
       transInfo: [],
+      isLoadingBlocks: false,
+      isLoadingTrans: false,
       pageTranslateY: 0,
       height: 0
     }
@@ -97,8 +102,8 @@ export default {
       this.baseInfo[2].value = window.installedCcInfo.length
     }
 
+    this.isLoadingBlocks = true
     api.getRecentBlock().then((res) => {
-      console.log(res)
       let data = res.data
       this.baseInfo[0].value = 4
       this.baseInfo[1].value = data.count
@@ -110,8 +115,10 @@ export default {
           time: item.timestamp
         }
       })
+      this.isLoadingBlocks = false
       this.$nextTick(this.updateSize)
     })
+    this.isLoadingTrans = true
     api.getRecentTrans().then((res) => {
       let data = res.data
       this.baseInfo[3].value = data.count
@@ -121,6 +128,7 @@ export default {
           time: item.timestamp
         }
       })
+      this.isLoadingTrans = false
       this.$nextTick(this.updateSize)
     }).catch(() => {
       window.notice('#d21107', 'Network Error! Can not get the transaction info!', 3000)
@@ -144,6 +152,9 @@ export default {
         window.notice('#d21107', 'Network Error! Can not get the Chaincode info!', 3000)
       })
     }
+  },
+  components: {
+    loadingAnimation
   }
 }
 </script>
@@ -215,6 +226,11 @@ export default {
   box-sizing: border-box;
   display: inline-block;
 }
+.tc-chain-loading {
+  display: block;
+  margin: 0 auto;
+}
+
 @media screen and (max-width: 1300px) {
   .tc-chain-boxs li {
     width: 100%;

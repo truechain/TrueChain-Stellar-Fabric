@@ -60,6 +60,7 @@
             <div class="mask" v-if="item.isWaiting">waiting...</div>
           </div>
         </li>
+        <loading-animation :key="'loading'" class="tc-cc-loading" :color="'#bbb'" :isActive="isLoadingCcList"></loading-animation>
       </transition-group>
       <!-- <div class="tc-chaincode-info">
         <p class="tc-chaincode-info-title">{{info.chaincode}} / {{info.type}}</p>
@@ -69,6 +70,7 @@
 </template>
 
 <script>
+import loadingAnimation from '@/components/common/gui/loading'
 import api from '@/api-config'
 
 const ccInfo = {
@@ -93,6 +95,7 @@ export default {
       chaincodeFileName: '',
       uploadStatus: 'end',
       ccInfo,
+      isLoadingCcList: false,
       ccList: [],
       info: {
         chaincode: '',
@@ -147,6 +150,7 @@ export default {
   },
   methods: {
     queryCcList () {
+      this.isLoadingCcList = true
       api.queryChaincodes().then(res => {
         this.ccList = res.data.map(item => {
           return {
@@ -157,6 +161,7 @@ export default {
             args: ''
           }
         })
+        this.isLoadingCcList = false
       })
 
       setTimeout(this.updateSize, 1000)
@@ -253,6 +258,9 @@ export default {
         item.isWaiting = false
       })
     }
+  },
+  components: {
+    loadingAnimation
   }
 }
 </script>
@@ -556,6 +564,11 @@ export default {
 }
 .tc-chaincode-args-sub:hover {
   color: #014676;
+}
+
+.tc-cc-loading {
+  display: block;
+  margin: 10px auto;
 }
 
 .fade-enter-active, .fade-leave-active {
