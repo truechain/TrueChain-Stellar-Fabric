@@ -2,7 +2,7 @@
   <div id="hellopage">
     <div class="tc-card tc-hello-card">
       <h1>Hello!</h1>
-      <p>Welcome to Steller. Currently it is a <span class="marked">test network</span>.</p>
+      <p>Welcome to Stellar. Currently it is a <span class="marked">test network</span> based on PBFT protocol and Fabric.</p>
       <p>Please <span class="blod">do not</span> upload <span class="marked">code or data that contains any private information</span> to the chain.</p>
     </div>
     <div class="tc-card tc-hello-signup">
