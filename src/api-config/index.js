@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const url = 'http://54.244.27.19:4000'
-const nodeServerUrl = 'http://54.244.27.19:5000'
+const url = 'https://stellar.truechain.pro/fabric'
+const nodeServerUrl = 'https://stellar.truechain.pro/nodeserver'
 
 export default {
   enroll (username, orgName) {
