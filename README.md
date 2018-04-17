@@ -1,4 +1,4 @@
-# steller
+# Stellar
 
 > TrueChain Dashboard
 
