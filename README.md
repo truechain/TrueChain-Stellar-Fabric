@@ -1,6 +1,6 @@
-# Stellar
+# Stellar-dashboard
 
-> TrueChain Dashboard
+>The front end project of Stellar
 
 ## Build Setup
 
