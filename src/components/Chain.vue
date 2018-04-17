@@ -105,7 +105,7 @@ export default {
     this.isLoadingBlocks = true
     api.getRecentBlock().then((res) => {
       let data = res.data
-      this.baseInfo[0].value = 4
+      this.baseInfo[0].value = 21
       this.baseInfo[1].value = data.count
       this.blockInfo = data.rows.map((item) => {
         return {
